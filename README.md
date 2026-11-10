@@ -54,3 +54,21 @@ Memory is n8n's in-memory store: it is lost when n8n restarts.
 ## Env vars
 
 See `.env.example`. Real values live in `.env.local` (gitignored) and in Vercel.
+
+## Front-end
+
+Next.js (App Router) + Tailwind + shadcn/ui. The browser calls `POST /api/chat`, which validates the input, rate-limits (20 requests per 10 min per IP, in memory, best-effort on Vercel) and forwards to the n8n webhook with `x-api-key`.
+
+Chat history and progress (XP, level, daily streak) live in the browser's `localStorage` (`fitness-coach:v1`). There are no accounts, and progress doesn't sync across devices.
+
+Gamification: +10 XP per answered message (12+ characters, not a repeat), +20 for the first one each day. Level n → n+1 costs `50 + 20·(n−1)` XP.
+
+```bash
+npm install
+cp .env.example .env.local   # fill in N8N_WEBHOOK_URL and N8N_API_KEY
+npm run dev                  # http://localhost:3000
+npm test                     # unit tests (node --test)
+npm run build
+```
+
+Design spec: [docs/specs/2026-11-10-fitness-coach-frontend-design.md](docs/specs/2026-11-10-fitness-coach-frontend-design.md)

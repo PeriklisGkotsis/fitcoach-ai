@@ -12,7 +12,7 @@ export function MobileProgress({ progress, celebrate }: { progress: Progress; ce
   return (
     <Sheet>
       <SheetTrigger
-        className={cn("flex items-center gap-3 rounded-[8px] px-2 py-1.5", celebrate && "animate-level-pulse")}
+        className={cn("flex items-center gap-3 rounded-[8px] px-2 py-1.5 transition-colors hover:bg-muted", celebrate && "animate-level-pulse")}
         aria-label={`Level ${level}, ${intoLevel} of ${levelCost} XP, ${streak}-day streak. Show progress`}
       >
         <span className="font-display text-lg font-semibold text-pine tabular-nums [font-stretch:70%]">Lv {level}</span>
