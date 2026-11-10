@@ -124,7 +124,7 @@ export function CoachApp() {
         </div>
       </header>
 
-      <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)] grid-rows-[minmax(0,1fr)] gap-4 p-2 sm:p-4 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)] grid-rows-[minmax(0,1fr)] gap-4 p-2 sm:p-4 md:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px]">
         <main className="flex min-h-0 flex-col overflow-hidden rounded-2xl border bg-surface">
           {confirmReset ? (
             <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-raised px-4 py-3 text-sm" role="alert">
@@ -150,7 +150,7 @@ export function CoachApp() {
           </div>
         </main>
 
-        <aside className="hidden min-h-0 flex-col overflow-hidden rounded-2xl border bg-surface lg:flex" aria-label="Your progress">
+        <aside className="hidden min-h-0 flex-col overflow-hidden rounded-2xl border bg-surface md:flex" aria-label="Your progress">
           <h2 className="border-b px-5 py-4 text-lg font-semibold">Progress</h2>
           <div className="min-h-0 flex-1 overflow-y-auto p-4">
             {store ? <ProgressCards progress={store.progress} celebrate={celebrate} /> : null}

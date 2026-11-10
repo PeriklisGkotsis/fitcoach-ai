@@ -31,12 +31,12 @@ export function LevelChip({ progress, celebrate }: { progress: Progress; celebra
 
   return (
     <>
-      <div className={cn(chip, "hidden lg:flex", celebrate && "animate-level-pulse")} title={summary}>
+      <div className={cn(chip, "hidden md:flex", celebrate && "animate-level-pulse")} title={summary}>
         <ChipBody progress={progress} celebrate={celebrate} />
       </div>
       <Sheet>
         <SheetTrigger
-          className={cn(chip, "transition-colors hover:bg-raised lg:hidden", celebrate && "animate-level-pulse")}
+          className={cn(chip, "transition-colors hover:bg-raised md:hidden", celebrate && "animate-level-pulse")}
           aria-label={`${summary} Show progress`}
         >
           <ChipBody progress={progress} celebrate={celebrate} />
