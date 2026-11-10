@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+:root {
+  --paper: #f5f6f3;
+  --surface: #ffffff;
+  --ink: #1d2420;
+  --muted-ink: #6b746f;
+  --line: #dde1dc;
+  --pine: #1e5b47;
+  --radius: 0.625rem;
+
+  /* shadcn aliases */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--pine);
+  --primary-foreground: #ffffff;
+  --secondary: #ebeeea;
+  --secondary-foreground: var(--ink);
+  --muted: #ebeeea;
+  --muted-foreground: var(--muted-ink);
+  --accent: #ebeeea;
+  --accent-foreground: var(--ink);
+  --destructive: #b42318;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--pine);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-line: var(--line);
+  --color-pine: var(--pine);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --animate-level-roll: level-roll 600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-level-pulse: level-pulse 900ms ease-out 1;
+}
+
+@keyframes level-roll {
+  from { transform: translateY(45%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes level-pulse {
+  0%, 100% { background-color: transparent; }
+  40% { background-color: color-mix(in srgb, var(--pine) 14%, transparent); }
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  :focus-visible { outline: 2px solid var(--pine); outline-offset: 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Markdown inside Coach bubbles */
+.coach-md > * + * { margin-top: 0.7em; }
+.coach-md h1, .coach-md h2, .coach-md h3 { font-weight: 600; font-size: 1em; }
+.coach-md ul { list-style: disc; padding-left: 1.25em; }
+.coach-md ol { list-style: decimal; padding-left: 1.4em; }
+.coach-md li + li { margin-top: 0.25em; }
+.coach-md strong { font-weight: 600; }
+.coach-md a { color: var(--pine); text-decoration: underline; text-underline-offset: 2px; }
+.coach-md code { font-size: 0.9em; background: var(--muted); padding: 0.1em 0.3em; border-radius: 4px; }
+.coach-md table { border-collapse: collapse; font-size: 0.92em; min-width: 100%; }
+.coach-md th, .coach-md td { border-bottom: 1px solid var(--line); padding: 0.45em 0.75em 0.45em 0; text-align: left; vertical-align: top; white-space: nowrap; }
+.coach-md th { font-weight: 600; }
