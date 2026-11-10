@@ -1,12 +1,10 @@
-import { EMPTY_PROGRESS, type Progress } from "./progress.ts";
+import { EMPTY_PROGRESS, localDayKey, type Progress } from "./progress.ts";
 
 export type ChatMessage = {
   id: string;
   role: "user" | "coach";
   text: string;
   at: number;
-  xp?: number;
-  dailyBonus?: boolean;
   kind?: "levelup";
 };
 
@@ -20,21 +18,33 @@ export function newSessionId(): string {
   return crypto.randomUUID();
 }
 
-export function freshStored(): Stored {
-  return { sessionId: newSessionId(), messages: [], progress: { ...EMPTY_PROGRESS } };
+export function freshStored(now = new Date()): Stored {
+  return { sessionId: newSessionId(), messages: [], progress: { ...EMPTY_PROGRESS, memberSince: localDayKey(now) } };
 }
 
-// Capped so a hand-edited value can't make levelFor loop for minutes.
+// Capped so a hand-edited value can't break the tracker.
 const MAX_COUNT = 10_000_000;
 const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
 const isCount = (v: unknown): v is number => Number.isSafeInteger(v) && (v as number) >= 0 && (v as number) <= MAX_COUNT;
 const isStrOrNull = (v: unknown) => v === null || typeof v === "string";
 const isDayOrNull = (v: unknown) => v === null || (typeof v === "string" && DAY_RE.test(v));
 
-function isProgress(v: unknown): v is Progress {
-  if (!v || typeof v !== "object") return false;
+// Accepts progress saved before levels were message-based (it had `xp`, no
+// `bestStreak` or `memberSince`) and returns it in the current shape.
+function toProgress(v: unknown): Progress | null {
+  if (!v || typeof v !== "object") return null;
   const p = v as Record<string, unknown>;
-  return isCount(p.xp) && isCount(p.counted) && isCount(p.streak) && isDayOrNull(p.lastActiveDay) && isStrOrNull(p.lastCountedText);
+  const ok = isCount(p.counted) && isCount(p.streak) && isDayOrNull(p.lastActiveDay) && isStrOrNull(p.lastCountedText)
+    && (p.bestStreak === undefined || isCount(p.bestStreak)) && (p.memberSince === undefined || isDayOrNull(p.memberSince));
+  if (!ok) return null;
+  return {
+    counted: p.counted as number,
+    streak: p.streak as number,
+    bestStreak: Math.max((p.bestStreak as number | undefined) ?? 0, p.streak as number),
+    lastActiveDay: p.lastActiveDay as string | null,
+    lastCountedText: p.lastCountedText as string | null,
+    memberSince: (p.memberSince as string | null | undefined) ?? null,
+  };
 }
 
 function isMessage(v: unknown): v is ChatMessage {
@@ -53,11 +63,12 @@ export function parseStored(raw: string | null): Stored | null {
   }
   if (!data || typeof data !== "object") return null;
   const d = data as Record<string, unknown>;
-  if (!isProgress(d.progress)) return null;
+  const progress = toProgress(d.progress);
+  if (!progress) return null;
 
   const messages = Array.isArray(d.messages) && d.messages.every(isMessage) ? (d.messages as ChatMessage[]) : [];
   const sessionId = typeof d.sessionId === "string" && SESSION_RE.test(d.sessionId) ? d.sessionId : newSessionId();
-  return { sessionId, messages, progress: d.progress };
+  return { sessionId, messages, progress };
 }
 
 export function loadStored(): Stored {

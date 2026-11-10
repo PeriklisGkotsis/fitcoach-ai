@@ -59,9 +59,9 @@ See `.env.example`. Real values live in `.env.local` (gitignored) and in Vercel.
 
 Next.js (App Router) + Tailwind + shadcn/ui. The browser calls `POST /api/chat`, which validates the input, rate-limits (20 requests per 10 min per IP, in memory, best-effort on Vercel) and forwards to the n8n webhook with `x-api-key`.
 
-Chat history and progress (XP, level, daily streak) live in the browser's `localStorage` (`fitness-coach:v1`). There are no accounts, and progress doesn't sync across devices.
+Chat history and progress (message count, level, daily streak, best streak, member since) live in the browser's `localStorage` (`fitness-coach:v1`). There are no accounts, and progress doesn't sync across devices.
 
-Gamification: +10 XP per answered message (12+ characters, not a repeat), +20 for the first one each day. Level n → n+1 costs `50 + 20·(n−1)` XP.
+Gamification: every answered message counts (12+ characters, not a repeat of the last one). Levels by message count: Rookie 0–10, Dedicated 11–25, Warrior 26–50, Champion 51–99, Legend 100+. The streak counts consecutive local days with at least one counted message. Progress saved by the older XP version carries over (its message count and streak are kept).
 
 ```bash
 npm install

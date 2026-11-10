@@ -3,41 +3,48 @@
 @import "shadcn/tailwind.css";
 
 :root {
-  --paper: #f5f6f3;
-  --surface: #ffffff;
-  --ink: #1d2420;
-  --muted-ink: #646d68; /* spec #6B746F darkened for AA on paper */
-  --line: #dde1dc;
-  --pine: #1e5b47;
-  --radius: 0.625rem;
+  color-scheme: dark;
+  --bg: #0e0f11;
+  --surface: #16181b;
+  --raised: #1d2024;
+  --ink: #ecedee;
+  --muted-ink: #8a9096;
+  --line: #26292d;
+  --brand: #34b27b;
+  --brand-ink: #06140d; /* text on brand fills */
+  --gold: #e5b33b;
+  --radius: 0.75rem;
 
   /* shadcn aliases */
-  --background: var(--paper);
+  --background: var(--bg);
   --foreground: var(--ink);
   --card: var(--surface);
   --card-foreground: var(--ink);
   --popover: var(--surface);
   --popover-foreground: var(--ink);
-  --primary: var(--pine);
-  --primary-foreground: #ffffff;
-  --secondary: #ebeeea;
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-ink);
+  --secondary: var(--raised);
   --secondary-foreground: var(--ink);
-  --muted: #ebeeea;
+  --muted: var(--raised);
   --muted-foreground: var(--muted-ink);
-  --accent: #ebeeea;
+  --accent: var(--raised);
   --accent-foreground: var(--ink);
-  --destructive: #b42318;
+  --destructive: #f0645a;
   --border: var(--line);
   --input: var(--line);
-  --ring: var(--pine);
+  --ring: var(--brand);
 }
 
 @theme inline {
-  --color-paper: var(--paper);
+  --color-bg: var(--bg);
   --color-surface: var(--surface);
+  --color-raised: var(--raised);
   --color-ink: var(--ink);
   --color-line: var(--line);
-  --color-pine: var(--pine);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-gold: var(--gold);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -58,22 +65,22 @@
   --color-ring: var(--ring);
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --animate-level-roll: level-roll 600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-level-pop: level-pop 650ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
   --animate-level-pulse: level-pulse 900ms ease-out 1;
 }
 
-@keyframes level-roll {
-  from { transform: translateY(45%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+@keyframes level-pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); }
 }
 @keyframes level-pulse {
   0%, 100% { background-color: transparent; }
-  40% { background-color: color-mix(in srgb, var(--pine) 14%, transparent); }
+  40% { background-color: color-mix(in srgb, var(--brand) 18%, transparent); }
 }
 
 @layer base {
@@ -84,7 +91,7 @@
     font-size: 16px;
     line-height: 1.55;
   }
-  :focus-visible { outline: 2px solid var(--pine); outline-offset: 2px; }
+  :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -103,10 +110,10 @@
 .coach-md ol { list-style: decimal; padding-left: 1.4em; }
 .coach-md li + li { margin-top: 0.25em; }
 .coach-md strong { font-weight: 600; }
-.coach-md a { color: var(--pine); text-decoration: underline; text-underline-offset: 2px; }
-.coach-md pre { max-width: 100%; overflow-x: auto; background: var(--muted); padding: 0.6em 0.8em; border-radius: 8px; }
+.coach-md a { color: var(--brand); text-decoration: underline; text-underline-offset: 2px; }
+.coach-md pre { max-width: 100%; overflow-x: auto; background: var(--bg); padding: 0.6em 0.8em; border-radius: 8px; }
 .coach-md pre code { background: none; padding: 0; }
-.coach-md code { font-size: 0.9em; background: var(--muted); padding: 0.1em 0.3em; border-radius: 4px; }
+.coach-md code { font-size: 0.9em; background: var(--bg); padding: 0.1em 0.3em; border-radius: 4px; }
 .coach-md table { border-collapse: collapse; font-size: 0.92em; min-width: 100%; }
 .coach-md th, .coach-md td { border-bottom: 1px solid var(--line); padding: 0.45em 0.9em 0.45em 0; text-align: left; vertical-align: top; min-width: 6.5rem; }
 .coach-md th { font-weight: 600; white-space: nowrap; }
@@ -114,6 +121,6 @@
 .coach-md tr:last-child td { border-bottom: 0; }
 
 /* Browser surfaces */
-::selection { background: color-mix(in srgb, var(--pine) 18%, transparent); color: var(--ink); }
-textarea { caret-color: var(--pine); }
+::selection { background: color-mix(in srgb, var(--brand) 35%, transparent); color: var(--ink); }
+textarea { caret-color: var(--brand); }
 * { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
