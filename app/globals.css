@@ -104,6 +104,8 @@
 .coach-md li + li { margin-top: 0.25em; }
 .coach-md strong { font-weight: 600; }
 .coach-md a { color: var(--pine); text-decoration: underline; text-underline-offset: 2px; }
+.coach-md pre { max-width: 100%; overflow-x: auto; background: var(--muted); padding: 0.6em 0.8em; border-radius: 8px; }
+.coach-md pre code { background: none; padding: 0; }
 .coach-md code { font-size: 0.9em; background: var(--muted); padding: 0.1em 0.3em; border-radius: 4px; }
 .coach-md table { border-collapse: collapse; font-size: 0.92em; min-width: 100%; }
 .coach-md th, .coach-md td { border-bottom: 1px solid var(--line); padding: 0.45em 0.9em 0.45em 0; text-align: left; vertical-align: top; min-width: 6.5rem; }

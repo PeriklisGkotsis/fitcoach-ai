@@ -52,3 +52,13 @@ test("parseStored rejects negative or non-numeric progress", () => {
   assert.equal(parseStored(JSON.stringify({ ...valid, progress: { ...valid.progress, xp: -5 } })), null);
   assert.equal(parseStored(JSON.stringify({ ...valid, progress: { ...valid.progress, streak: "3" } })), null);
 });
+
+test("parseStored rejects absurd or fractional counts that would hang levelFor", () => {
+  for (const xp of [1e21, 1e8, 12.5]) {
+    assert.equal(parseStored(JSON.stringify({ ...valid, progress: { ...valid.progress, xp } })), null);
+  }
+});
+
+test("parseStored rejects a malformed lastActiveDay", () => {
+  assert.equal(parseStored(JSON.stringify({ ...valid, progress: { ...valid.progress, lastActiveDay: "zzz" } })), null);
+});

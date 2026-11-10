@@ -55,7 +55,8 @@ export function CoachApp() {
     inFlight.current = false;
     setPending(false);
     const latest = storeRef.current;
-    if (!latest) return;
+    // Chat was cleared while waiting: drop the reply from the old session.
+    if (!latest || latest.sessionId !== current.sessionId) return;
     if (!result.success) {
       setFailed({ id: userMessageId, text, error: result.error });
       return;
@@ -123,7 +124,7 @@ export function CoachApp() {
           <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-surface px-4 py-3 text-sm lg:px-8" role="alert">
             <span>Clear this chat? Your level and streak stay.</span>
             <span className="flex gap-2">
-              <Button size="sm" className="rounded-[8px]" onClick={startOver}>Clear chat</Button>
+              <Button size="sm" className="rounded-[8px]" disabled={pending} onClick={startOver}>Clear chat</Button>
               <Button size="sm" variant="outline" className="rounded-[8px]" onClick={() => setConfirmReset(false)}>Cancel</Button>
             </span>
           </div>

@@ -74,13 +74,16 @@ test("a missed day resets the streak to 1", () => {
   assert.equal(r.gained, 30);
 });
 
-test("clock moved backwards gives no bonus and keeps the streak", () => {
-  const p: Progress = { ...EMPTY_PROGRESS, xp: 30, counted: 1, streak: 3, lastActiveDay: "2026-11-10" };
+test("a last active day in the future (clock moved back) keeps the streak and re-anchors to today", () => {
+  const p: Progress = { ...EMPTY_PROGRESS, xp: 30, counted: 1, streak: 3, lastActiveDay: "2027-03-01" };
   const r = award(p, "Is my clock wrong today?", at(2026, 11, 9));
-  assert.equal(r.gained, 10);
-  assert.equal(r.dailyBonus, false);
+  assert.equal(r.dailyBonus, true);
   assert.equal(r.progress.streak, 3);
-  assert.equal(r.progress.lastActiveDay, "2026-11-10");
+  assert.equal(r.progress.lastActiveDay, "2026-11-09");
+  const same = award(r.progress, "Another question today", at(2026, 11, 9, 18));
+  assert.equal(same.dailyBonus, false);
+  const next = award(same.progress, "Next day question here", at(2026, 11, 10));
+  assert.equal(next.progress.streak, 4);
 });
 
 test("crossing a level boundary reports the new level only once", () => {

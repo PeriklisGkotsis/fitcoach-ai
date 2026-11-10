@@ -68,9 +68,11 @@ export function award(p: Progress, text: string, now: Date): Award {
   }
 
   const today = localDayKey(now);
-  // String compare works for zero-padded YYYY-MM-DD. A past "today" (clock moved back) is not a new day.
-  const firstToday = p.lastActiveDay === null || today > p.lastActiveDay;
-  const streak = !firstToday ? p.streak : p.lastActiveDay === yesterdayKey(now) ? p.streak + 1 : 1;
+  // A stored day in the future means the clock moved back: count today as a new day,
+  // keep the streak as-is, and re-anchor to today so the bonus can't lock out until that date.
+  const firstToday = today !== p.lastActiveDay;
+  const fromFuture = p.lastActiveDay !== null && p.lastActiveDay > today;
+  const streak = !firstToday ? p.streak : fromFuture ? p.streak : p.lastActiveDay === yesterdayKey(now) ? p.streak + 1 : 1;
   const gained = XP_PER_MESSAGE + (firstToday ? DAILY_BONUS : 0);
 
   const progress: Progress = {

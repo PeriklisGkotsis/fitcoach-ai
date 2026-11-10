@@ -24,13 +24,17 @@ export function freshStored(): Stored {
   return { sessionId: newSessionId(), messages: [], progress: { ...EMPTY_PROGRESS } };
 }
 
-const isCount = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v) && v >= 0;
+// Capped so a hand-edited value can't make levelFor loop for minutes.
+const MAX_COUNT = 10_000_000;
+const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+const isCount = (v: unknown): v is number => Number.isSafeInteger(v) && (v as number) >= 0 && (v as number) <= MAX_COUNT;
 const isStrOrNull = (v: unknown) => v === null || typeof v === "string";
+const isDayOrNull = (v: unknown) => v === null || (typeof v === "string" && DAY_RE.test(v));
 
 function isProgress(v: unknown): v is Progress {
   if (!v || typeof v !== "object") return false;
   const p = v as Record<string, unknown>;
-  return isCount(p.xp) && isCount(p.counted) && isCount(p.streak) && isStrOrNull(p.lastActiveDay) && isStrOrNull(p.lastCountedText);
+  return isCount(p.xp) && isCount(p.counted) && isCount(p.streak) && isDayOrNull(p.lastActiveDay) && isStrOrNull(p.lastCountedText);
 }
 
 function isMessage(v: unknown): v is ChatMessage {
